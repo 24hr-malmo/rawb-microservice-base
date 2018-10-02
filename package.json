@@ -1,6 +1,6 @@
 {
   "name": "rawb-microservice-base",
-  "version": "0.9.12",
+  "version": "0.9.13",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -21,7 +21,7 @@
   "homepage": "https://github.com/24hr-malmo/rawb-microservice-base#readme",
   "dependencies": {
     "isomorphic-fetch": "2.2.1",
-    "restify": "5.2.0",
+    "restify": "7.2.1",
     "semver": "5.5.0",
     "winston": "2.3.1"
   },
