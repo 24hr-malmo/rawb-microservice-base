@@ -9,13 +9,19 @@ const start = async () => {
         version: '1.0.0',
         appPath:  '/data',
         port: 9000,
+        logger: { error: console.log, verbose: console.log, },
     };
 
     let server = await ms.start(options);
-
     server.get('/tjena', (req, res, next) => {
         res.send({hej: 1});
         next();
+    });
+
+    server.post('/foo', async (req, res, next) => {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        res.send({answer: 'bar'});
+        await next();
     });
 
     // Normal errors
@@ -28,9 +34,30 @@ const start = async () => {
         throw new Error('error-2');
     });
 
-    await new Promise(resolve => setTimeout(resolve, 10));
+    console.log('Server started');
 
-    console.log('START');
+    setTimeout( async() => {
+
+
+
+
+    try {
+        let req = await fetch('http://localhost:9000/tjena');
+        let res = await req.text();
+        console.log('Result 1', res);
+    } catch (err) {
+        console.log(err);
+    }
+
+    try {
+        let req = await fetch('http://localhost:9000/foo', { method: 'POST' });
+        let res = await req.text();
+        console.log('Result 2', res);
+    } catch (err) {
+        console.log(err);
+    }
+
+
 
     try {
         let req1 = await fetch('http://localhost:9000/data/error-2');
@@ -39,6 +66,8 @@ const start = async () => {
     } catch (err) {
         console.log(err);
     }
+
+    }, 5000);
 
 
 
