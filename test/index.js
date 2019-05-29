@@ -9,7 +9,7 @@ const options = {
     version: '1.0.0',
     appPath:  '/data',
     port: PORT,
-    logger: { error: console.log, verbose: console.log, },
+    logger: { error: () => {}, verbose: console.log, },
 };
 
 describe('Errors', function () {
