@@ -26,3 +26,7 @@ const start = async () => {
 start();
 
 ```
+
+## Run tests
+
+```npm run test```
