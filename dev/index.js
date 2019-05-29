@@ -1,6 +1,7 @@
-require('isomorphic-fetch');
+const axios = require('axios');
 
-let ms = require('../');
+const ms = require('../');
+const PORT = 9000;
 
 const start = async () => {
 
@@ -8,11 +9,12 @@ const start = async () => {
         name: 'foo 1.0.0',
         version: '1.0.0',
         appPath:  '/data',
-        port: 9000,
+        port: PORT,
         logger: { error: console.log, verbose: console.log, },
     };
 
     let server = await ms.start(options);
+
     server.get('/tjena', (req, res, next) => {
         res.send({hej: 1});
         next();
@@ -34,41 +36,54 @@ const start = async () => {
         throw new Error('error-2');
     });
 
+    server.get('/error-3', (req, res, next) => {
+        next({name: 'error-1', toJSON: () => {
+            return {
+                custom: 'foo',
+                data: 1
+            };
+        }});
+    });
+
     console.log('Server started');
 
-    setTimeout( async() => {
-
-
-
+    const serverUrl = `http://localhost:${PORT}`;
 
     try {
-        let req = await fetch('http://localhost:9000/tjena');
-        let res = await req.text();
-        console.log('Result 1', res);
+        console.log('Call /tjena');
+        let response = await axios.get(`${serverUrl}/tjena`);
+        let body = await response.text();
+        console.log('Result 1', body);
     } catch (err) {
-        console.log(err);
+        console.log('Error', err.code, err.stack);
     }
 
     try {
-        let req = await fetch('http://localhost:9000/foo', { method: 'POST' });
+        console.log('Call /foo');
+        let req = await axios.post(`${serverUrl}/foo`, { method: 'POST' });
         let res = await req.text();
         console.log('Result 2', res);
     } catch (err) {
-        console.log(err);
+        console.log('Error', err.code, err.stack);
     }
-
-
 
     try {
-        let req1 = await fetch('http://localhost:9000/data/error-2');
-        let res1 = await req1.text();
-        console.log('res1', res1);
+        console.log('Call /data/error-1');
+        let req = await axios.get(`${serverUrl}/data/error-1`);
+        let res = await req.text();
+        console.log('res', res);
     } catch (err) {
-        console.log(err);
+        console.log('Error', err.code, err.stack);
     }
 
-    }, 5000);
-
+    try {
+        console.log('Call /data/error-2');
+        let req = await axios.get(`${serverUrl}/data/error-2`);
+        let res = await req.text();
+        console.log('res', res);
+    } catch (err) {
+        console.log('Error', err.code, err.stack);
+    }
 
 
 };
