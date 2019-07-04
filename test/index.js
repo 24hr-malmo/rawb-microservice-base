@@ -10,6 +10,7 @@ const options = {
     appPath:  '/data',
     port: PORT,
     logger: { error: () => {}, verbose: console.log, },
+    // logger: { error: (...args) => { console.log (...args) }, verbose: console.log, },
 };
 
 describe('Errors', function () {
