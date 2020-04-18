@@ -29,7 +29,7 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "babel-eslint": "^7.0.0",
-    "eslint": "^3.19.0",
+    "eslint": "^6.6.0",
     "eslint-24hr": "1.0.5",
     "mocha": "^6.1.4"
   }
